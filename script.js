@@ -1,9 +1,7 @@
-// Initial state
 const initialData = [];
 
 let items = [...initialData];
 
-// DOM Elements
 const listContainer = document.getElementById('item-list');
 const countBadge = document.getElementById('item-count');
 const addForm = document.getElementById('add-form');
@@ -11,7 +9,6 @@ const searchInput = document.getElementById('search-input');
 const maxPriceInput = document.getElementById('max-price-input');
 const resetButton = document.getElementById('reset-btn');
 
-// Utility: Format Rupiah (custom formatting to match the design)
 const formatRupiah = (number) => {
   return new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -21,19 +18,16 @@ const formatRupiah = (number) => {
   }).format(number).replace(/^Rp/, 'Rp ');
 };
 
-// Render Items to the table
 const renderItems = () => {
   const searchTerm = searchInput.value.toLowerCase();
   const maxPrice = maxPriceInput.value ? parseInt(maxPriceInput.value) : Infinity;
 
-  // Filter items based on search and max price
   const filteredItems = items.filter(item => {
     const matchName = item.name.toLowerCase().includes(searchTerm);
     const matchPrice = item.price <= maxPrice;
     return matchName && matchPrice;
   });
 
-  // Clear list container
   listContainer.innerHTML = '';
   
   if (filteredItems.length === 0) {
@@ -55,7 +49,6 @@ const renderItems = () => {
       `;
     }
   } else {
-    // Inject items into the list
     filteredItems.forEach(item => {
       const row = document.createElement('div');
       row.className = 'grid grid-cols-12 items-center px-6 py-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors';
@@ -81,11 +74,9 @@ const renderItems = () => {
     });
   }
 
-  // Update item count badge
   countBadge.textContent = `${items.length} Barang`;
 };
 
-// Handle Add Form Submission
 addForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const nameInput = document.getElementById('name');
@@ -98,24 +89,20 @@ addForm.addEventListener('submit', (e) => {
 
   if (name && !isNaN(price) && !isNaN(stock)) {
     const newItem = {
-      id: Date.now(), // Generate a unique ID based on timestamp
+      id: Date.now(),
       name,
       price,
       stock
     };
     
-    // Add to items array
-    items.unshift(newItem); // Add new items to the top of the list
+    items.unshift(newItem);
     
-    // Reset form
     addForm.reset();
     
-    // Re-render
     renderItems();
   }
 });
 
-// Handle Delete Item
 window.deleteItem = (id) => {
   if(confirm("Apakah Anda yakin ingin menghapus barang ini?")) {
     items = items.filter(item => item.id !== id);
@@ -123,18 +110,13 @@ window.deleteItem = (id) => {
   }
 };
 
-// Handle Search Input
 searchInput.addEventListener('input', renderItems);
 
-// Handle Max Price Filter Input
 maxPriceInput.addEventListener('input', renderItems);
-
-// Handle Reset Filter Button
 resetButton.addEventListener('click', () => {
   searchInput.value = '';
   maxPriceInput.value = '';
   renderItems();
 });
 
-// Initial Render on Page Load
 renderItems();
