@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kasir Duro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-white text-gray-800 min-h-screen py-12 px-4 sm:px-6 lg:px-8 font-sans antialiased">
+  <div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-start mb-8">
+      <div>
+        <h1 class="text-2xl font-semibold text-[#1e293b]">Kasir Duro</h1>
+        <p class="text-sm text-gray-500 mt-1">Kelola inventaris toko Anda dengan lebih mudah.</p>
+      </div>
+      <div class="bg-gray-100 px-4 py-1.5 rounded-full text-sm font-medium text-gray-600">
+        <span id="item-count">0 Barang</span>
+      </div>
+    </div>
+
+    <!-- Tambah Barang Form -->
+    <div class="border border-gray-100 rounded-2xl p-6 mb-6 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)]">
+      <h2 class="text-[17px] font-semibold text-gray-800 mb-5">Tambah Barang Baru</h2>
+      <form id="add-form" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+        <!-- Nama Barang -->
+        <div class="col-span-12 md:col-span-5 flex flex-col">
+          <label for="name" class="text-sm font-medium text-gray-700 mb-1.5">Nama Barang</label>
+          <input type="text" id="name" placeholder="Contoh: Laptop Macbook Air" required
+            class="px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-400">
+        </div>
+        <!-- Harga Barang -->
+        <div class="col-span-12 md:col-span-3 flex flex-col">
+          <label for="price" class="text-sm font-medium text-gray-700 mb-1.5">Harga Barang (Rp)</label>
+          <input type="number" id="price" placeholder="0" min="0" required
+            class="px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-400">
+        </div>
+        <!-- Stok -->
+        <div class="col-span-12 md:col-span-2 flex flex-col">
+          <label for="stock" class="text-sm font-medium text-gray-700 mb-1.5">Stok</label>
+          <input type="number" id="stock" placeholder="0" min="0" required
+            class="px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-400">
+        </div>
+        <!-- Submit Button -->
+        <div class="col-span-12 md:col-span-2">
+          <button type="submit"
+            class="w-full bg-black text-white py-2.5 rounded-xl text-sm font-medium hover:bg-gray-800 transition-colors">
+            Tambah
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
+      <div class="relative flex-1 w-full">
+        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+          <svg class="h-[18px] w-[18px] text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+        <input type="text" id="search-input" placeholder="Cari nama barang"
+          class="block w-full pl-10 pr-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-400">
+      </div>
+      <div class="w-full sm:w-64">
+        <input type="number" id="max-price-input" placeholder="Rp Harga di bawah..." min="0"
+          class="block w-full px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-400">
+      </div>
+      <button type="button" id="reset-btn" class="text-sm font-semibold text-gray-600 hover:text-gray-900 px-2 sm:w-auto w-full text-left sm:text-center">
+        Reset
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="border border-gray-100 rounded-2xl overflow-hidden shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)]">
+      <!-- Table Header -->
+      <div class="grid grid-cols-12 bg-[#F1F3F5] px-6 py-3.5 border-b border-gray-100">
+        <div class="col-span-5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Nama Barang</div>
+        <div class="col-span-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Harga</div>
+        <div class="col-span-2 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Stok</div>
+        <div class="col-span-2 text-[11px] font-bold text-gray-500 uppercase tracking-wider text-right">Aksi</div>
+      </div>
+      <!-- Table Body -->
+      <div id="item-list" class="bg-white">
+        <!-- Items will be injected here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
